@@ -32,7 +32,7 @@ def obterInformacaoEFetch():
 
 #Escreve a informação da função anterior num ficheiro Fasta na pasta onde se encontra o programa
 def escreverFicheiroFasta():
-    saveFasta = open(r'sequenciacao.Fasta', 'w+')
+    saveFasta = open(r'sequenciacao.fasta', 'w+')
     informacao = obterInformacaoEFetch()
     saveFasta.write(informacao)
     saveFasta.close()
