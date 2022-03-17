@@ -1,52 +1,107 @@
 #! /usr/bin/python
 import sys
 from Bio import Entrez
-db = sys.argv[1]
-term = sys.argv[2]
 
-#Obtem o resultado de um ESearch feito à "Entrez API" com a "Data Base" e o "term" escritos pelo utilizador
-def obterResultadoESearch():
+
+def obterArgumentosDoUtilizador():
+    ''' 
+
+    Obtem os argumentos "Data Base" e o "term" escritos pelo utilizador
+    return: 
+    Os argumentos "Data Base" db (String) e o "term" term (String) escritos pelo utilizador
+
+    '''
+
+    db = sys.argv[1]
+    term = sys.argv[2]
+    return db, term
+
+
+def obterResultadoESearch(db, term):
+    ''' 
+
+    Obtem o resultado de um ESearch feito à "Entrez API" com a "Data Base" e o "term" escritos pelo utilizador
+    param: 
+    db ,term: "Data Base" e o "term" escritos pelo utilizador
+    return: 
+    o resultado da pesquisa feito ESearch feito à "Entrez API"
+
+    '''
+
     eSearch = Entrez.esearch(db=db, term=term, usehistory="y")
     resultado = Entrez.read(eSearch)
     return resultado
 
-#Obtem o WebEnv a partir do resultado da função anterior
-def obterWebEnv():
-    resultado = obterResultadoESearch()
+
+def obterWebEnv(resultado):
+    ''' 
+    
+    Obtem o WebEnv a partir do resultado da função anterior
+    param: 
+    resultado: o resultado da pesquisa feito ESearch feito à "Entrez API"
+    return: 
+    O WebEnv do resultado
+
+    '''
+
     webEnv = resultado["WebEnv"]
     return webEnv
 
-#Obtem a QueryKey a partir do resultado da primeira função
-def obteQueryKey():
-    resultado = obterResultadoESearch()
+
+def obterQueryKey(resultado):
+    ''' 
+    
+    Obtem a QueryKey a partir do resultado da primeira função
+    param: 
+    resultado: o resultado da pesquisa feito ESearch feito à "Entrez API"
+    return: 
+    A QueryKey do resultado
+
+    '''
+
     queryKey = resultado["QueryKey"]
     return queryKey
 
-#Obtem a informação do EFetch a partir da "Data Base", da QueryKey e do WebEnv que veem das funções anteriores
-def obterInformacaoEFetch():
-    queryKey = obteQueryKey()
-    webEnv = obterWebEnv()
+
+def obterInformacaoEFetch(queryKey, webEnv):
+    ''' 
+    
+    Obtem a informação do EFetch a partir da "Data Base", da QueryKey e do WebEnv que veem das funções anteriores
+    param: 
+    queryKey, webEnv: a QueryKey e o WebEnv do resultado feito com o ESearch feito à "Entrez API"
+    return: 
+    A informacao pelo feito EFetch feiro com a "Data Base", QueryKey e WebEnv no formato fasta 
+
+    '''
+
     fetchHandle = Entrez.efetch(db=db, webenv=webEnv, query_key=queryKey, rettype='fasta')
     informacao = fetchHandle.read()
     return informacao
 
-#Escreve a informação da função anterior num ficheiro Fasta na pasta onde se encontra o programa
-def escreverFicheiroFasta():
-    saveFasta = open(r'sequenciacao.Fasta', 'w+')
-    informacao = obterInformacaoEFetch()
+
+def escreverFicheiroFasta(informacao):
+    ''' 
+    
+    Escreve a informação da função anterior num ficheiro Fasta na pasta onde se encontra o programa
+    param: 
+    A informacao pelo feito EFetch feiro com a "Data Base", QueryKey e WebEnv no formato fasta
+
+    '''
+
+    saveFasta = open(r'sequenciacao.fasta', 'w+')
     saveFasta.write(informacao)
     saveFasta.close()
 
-#O main onde é executada a lógica das funções e programação
-if __name__ == '__main__':
-    obterResultadoESearch()
-    obterWebEnv()
-    obteQueryKey()
-    obterInformacaoEFetch()
-    print(obterInformacaoEFetch())
-    escreverFicheiroFasta()
-    print("Foi adicionado com sucesso um ficheiro sequenciacao.Fasta com o output: :)")
 
+if __name__ == '__main__':
+    db, term = obterArgumentosDoUtilizador()
+    resultado = obterResultadoESearch(db, term)
+    queryKey, webEnv = obterQueryKey(resultado), obterWebEnv(resultado)
+    informacao = obterInformacaoEFetch(queryKey, webEnv)
+    print(informacao)
+    escreverFicheiroFasta(informacao)
+    sys.stderr.write("Foi adicionado com sucesso um ficheiro sequenciacao.Fasta com o output >> ")
+    
     #Feito por:
     #Marine Fournier 202000224
     #Guilherme Silva 202000178
