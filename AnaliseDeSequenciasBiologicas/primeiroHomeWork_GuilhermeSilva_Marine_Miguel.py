@@ -78,6 +78,7 @@ def obterInformacaoEFetch(queryKey, webEnv):
     informacao = fetchHandle.read()
     return informacao
 
+<<<<<<< HEAD
 
 def escreverFicheiroFasta(informacao):
     ''' 
@@ -89,6 +90,12 @@ def escreverFicheiroFasta(informacao):
     '''
 
     saveFasta = open(r'sequenciacao.fasta', 'w+')
+=======
+#Escreve a informação da função anterior num ficheiro Fasta na pasta onde se encontra o programa
+def escreverFicheiroFasta():
+    saveFasta = open(r'sequenciacao.fasta', 'w+')
+    informacao = obterInformacaoEFetch()
+>>>>>>> 44402f7ff544aec5c67d1490f3be73456bf5c648
     saveFasta.write(informacao)
     saveFasta.close()
 
