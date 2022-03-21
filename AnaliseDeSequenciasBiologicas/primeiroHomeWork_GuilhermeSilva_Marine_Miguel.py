@@ -79,26 +79,12 @@ def obterInformacaoEFetch(queryKey, webEnv):
     return informacao
 
 
-def escreverFicheiroFasta(informacao):
-    ''' 
-
-    Escreve a informação da função anterior num ficheiro Fasta na pasta onde se encontra o programa
-    param: 
-    A informacao pelo feito EFetch feiro com a "Data Base", QueryKey e WebEnv no formato fasta
-
-    '''
-    saveFasta = open(r'sequenciacao.fasta', 'w+')
-    saveFasta.write(informacao)
-    saveFasta.close()
-
-
 if __name__ == '__main__':
     db, term = obterArgumentosDoUtilizador()
     resultado = obterResultadoESearch(db, term)
     queryKey, webEnv = obterQueryKey(resultado), obterWebEnv(resultado)
     informacao = obterInformacaoEFetch(queryKey, webEnv)
     print(informacao)
-    escreverFicheiroFasta(informacao)
     sys.stderr.write("Foi adicionado com sucesso um ficheiro sequenciacao.Fasta com o output >> ")
     
     #Feito por:
